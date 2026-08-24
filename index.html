@@ -10,15 +10,8 @@
     <div class="container">
         <h1>Gestión de Pedidos</h1>
         
-        <!-- Formulario de Registro (Quién Registra PRIMERO) -->
+        <!-- Formulario de Registro (Cliente -> Tela -> Modelo -> Quién Registra) -->
         <form id="orderForm">
-            <select id="seller" required>
-                <option value="" disabled selected>QUIÉN REGISTRA</option>
-                <option value="RONALD">RONALD</option>
-                <option value="MARLENE">MARLENE</option>
-                <option value="WILLIAN">WILLIAN</option>
-            </select>
-
             <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
 
             <select id="fabric" required>
@@ -28,6 +21,14 @@
             </select>
             
             <input type="text" id="model" placeholder="MODELO" style="text-transform: uppercase;" required>
+
+            <select id="seller" required>
+                <option value="" disabled selected>QUIÉN REGISTRA</option>
+                <option value="RONALD">RONALD</option>
+                <option value="MARLENE">MARLENE</option>
+                <option value="WILLIAN">WILLIAN</option>
+            </select>
+
             <button type="submit">Guardar Pedido</button>
         </form>
 
@@ -36,11 +37,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Fecha</th>
-                    <th>Registra</th>
+                    <th>Fecha / Hora</th>
                     <th>Cliente</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
+                    <th>Registra</th>
                     <th>Estado</th>
                     <th>Acción</th>
                 </tr>
@@ -53,11 +54,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Fecha</th>
-                    <th>Registra</th>
+                    <th>Fecha / Hora</th>
                     <th>Cliente</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
+                    <th>Registra</th>
                     <th>Estado</th>
                     <th>Eliminar</th>
                 </tr>
