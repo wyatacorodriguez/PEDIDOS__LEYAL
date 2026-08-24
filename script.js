@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU0pc02RSG7EJE4Q-P7_RNaPuurSHvhoNhPtfU8tVv9GjCnqheLm4dExl9amd3pPjL/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/TU_CODIGO_AQUI/exec";
 
 const orderForm = document.getElementById('orderForm');
 const activeOrders = document.getElementById('activeOrders');
@@ -7,30 +7,30 @@ const completedOrders = document.getElementById('completedOrders');
 document.addEventListener('DOMContentLoaded', fetchOrders);
 
 function fetchOrders() {
-    activeOrders.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
-    completedOrders.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
+    activeOrders.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
+    completedOrders.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
     
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(orders => displayOrders(orders))
         .catch(err => {
             console.error("Error al cargar pedidos:", err);
-            activeOrders.innerHTML = '<tr><td colspan="6" style="color:red;">Error de conexión.</td></tr>';
+            activeOrders.innerHTML = '<tr><td colspan="7" style="color:red;">Error de conexión.</td></tr>';
         });
 }
 
 orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const clientVal = document.getElementById('client').value.trim().toUpperCase();
     const sellerVal = document.getElementById('seller').value;
+    const clientVal = document.getElementById('client').value.trim().toUpperCase();
     const fabricVal = document.getElementById('fabric').value;
     const modelVal = document.getElementById('model').value.trim().toUpperCase();
 
     const newOrder = {
         action: "add",
-        client: clientVal,
         seller: sellerVal,
+        client: clientVal,
         fabric: fabricVal,
         model: modelVal,
         status: 'Pendiente'
@@ -92,13 +92,14 @@ function displayOrders(orders) {
     const completedList = orders.filter(o => o.status === 'Finalizado');
 
     if (activeList.length === 0) {
-        activeOrders.innerHTML = '<tr><td colspan="6">No hay trabajos activos.</td></tr>';
+        activeOrders.innerHTML = '<tr><td colspan="7">No hay trabajos activos.</td></tr>';
     } else {
         activeList.forEach(order => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${order.client}</td>
+                <td>${order.date || ''}</td>
                 <td>${order.seller}</td>
+                <td><strong>${order.client}</strong></td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
                 <td>
@@ -115,14 +116,15 @@ function displayOrders(orders) {
     }
 
     if (completedList.length === 0) {
-        completedOrders.innerHTML = '<tr><td colspan="6">No hay trabajos finalizados.</td></tr>';
+        completedOrders.innerHTML = '<tr><td colspan="7">No hay trabajos finalizados.</td></tr>';
     } else {
         completedList.forEach(order => {
             const row = document.createElement('tr');
             row.className = 'completed-order-row';
             row.innerHTML = `
-                <td><strong>${order.client}</strong></td>
+                <td>${order.date || ''}</td>
                 <td>${order.seller}</td>
+                <td><strong>${order.client}</strong></td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
                 <td>
