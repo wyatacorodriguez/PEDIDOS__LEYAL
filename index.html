@@ -10,16 +10,16 @@
     <div class="container">
         <h1>Gestión de Pedidos</h1>
         
-        <!-- Formulario de Registro -->
+        <!-- Formulario de Registro (Quién Registra PRIMERO) -->
         <form id="orderForm">
-            <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
-            
             <select id="seller" required>
                 <option value="" disabled selected>QUIÉN REGISTRA</option>
                 <option value="RONALD">RONALD</option>
                 <option value="MARLENE">MARLENE</option>
                 <option value="WILLIAN">WILLIAN</option>
             </select>
+
+            <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
 
             <select id="fabric" required>
                 <option value="" disabled selected>TELA O CALIDAD</option>
@@ -36,8 +36,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Cliente</th>
+                    <th>Fecha</th>
                     <th>Registra</th>
+                    <th>Cliente</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
                     <th>Estado</th>
@@ -52,8 +53,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Cliente</th>
+                    <th>Fecha</th>
                     <th>Registra</th>
+                    <th>Cliente</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
                     <th>Estado</th>
