@@ -1,21 +1,21 @@
 /* --- Estilos Generales y Base --- */
 * {
-    box-sizing: border-box; /* Asegura que padding no sume al ancho total */
+    box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
     margin: 0;
-    padding: 10px; /* Margen externo mínimo en móviles */
+    padding: 10px;
 }
 
 .container {
     width: 100%;
-    max-width: 850px; /* Ancho máximo para escritorio */
+    max-width: 850px;
     margin: 0 auto;
     background: #fff;
-    padding: 15px; /* Margen interno mínimo */
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -24,7 +24,7 @@ h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
-    font-size: 20px; /* Título un poco más pequeño en móviles */
+    font-size: 20px;
 }
 
 h2 {
@@ -38,12 +38,12 @@ form {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap; /* Permite que los campos se apilen */
+    flex-wrap: wrap;
 }
 
 form input, 
 form select {
-    flex: 1 1 100%; /* Cada campo ocupa el 100% del ancho en móvil */
+    flex: 1 1 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -52,7 +52,7 @@ form select {
 }
 
 form button {
-    flex: 1 1 100%; /* Botón ocupa el 100% del ancho en móvil */
+    flex: 1 1 100%;
     padding: 12px;
     background: #007bff;
     color: white;
@@ -63,20 +63,17 @@ form button {
     cursor: pointer;
 }
 
-/* --- ESTILOS DE TABLA DE BASTÓN (MÓVIL PRIMERO) --- */
-/* Forzamos que la tabla no actúe como tabla, sino como bloques apilados */
+/* --- ESTILOS DE TABLA ADAPTABLE (MÓVIL PRIMERO) --- */
 table, thead, tbody, th, td, tr {
     display: block;
 }
 
-/* Ocultamos las cabeceras de la tabla original */
 thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
 }
 
-/* Creamos una "tarjeta" para cada fila de pedido */
 tr {
     border: 1px solid #eee;
     margin-bottom: 15px;
@@ -84,23 +81,20 @@ tr {
     padding: 10px;
 }
 
-/* Estilo para las filas de trabajos finalizados (verde pálido) */
 tr.completed-order-row {
     background-color: #f0fff0;
 }
 
-/* Estilo para cada "celda" convertida en bloque */
 td {
     border: none;
     position: relative;
-    padding-left: 50%; /* Espacio para la etiqueta */
-    text-align: right; /* Alinear valor a la derecha */
+    padding-left: 50%;
+    text-align: right;
     padding-top: 8px;
     padding-bottom: 8px;
     font-size: 13px;
 }
 
-/* Añadimos las etiquetas de cabecera antes de cada valor */
 td:before {
     position: absolute;
     top: 10px;
@@ -113,21 +107,19 @@ td:before {
     color: #495057;
 }
 
-/* Definimos el texto de la etiqueta para cada columna */
+/* Etiquetas dinámicas para la versión móvil */
 td:nth-of-type(1):before { content: "Cliente"; }
-td:nth-of-type(2):before { content: "Tela / Calidad"; }
-td:nth-of-type(3):before { content: "Modelo"; }
-td:nth-of-type(4):before { content: "Estado"; }
-/* Para la columna de acción/eliminar, no necesitamos etiqueta */
-td:nth-of-type(5):before { content: ""; }
+td:nth-of-type(2):before { content: "Registra"; }
+td:nth-of-type(3):before { content: "Tela / Calidad"; }
+td:nth-of-type(4):before { content: "Modelo"; }
+td:nth-of-type(5):before { content: "Estado"; }
+td:nth-of-type(6):before { content: ""; }
 
-/* Ajuste específico para que el contenido de la celda no se corte */
 td > strong, td > select, td > button {
     display: inline-block;
     max-width: 100%;
 }
 
-/* Ajustes para los controles dentro de las "tarjetas" td */
 td select {
     width: 100%;
     padding: 8px;
@@ -137,7 +129,7 @@ td select {
 td button {
     width: 100%;
     padding: 8px;
-    margin-top: 10px; /* Separar del control de estado */
+    margin-top: 5px;
 }
 
 /* --- AJUSTES PARA PANTALLAS GRANDES (ESCRITORIO) --- */
@@ -155,7 +147,6 @@ td button {
         font-size: 18px;
     }
 
-    /* Formulario en línea */
     form input, 
     form select {
         flex: 1 1 auto;
@@ -166,21 +157,17 @@ td button {
         width: auto;
     }
 
-    /* Restaurar comportamiento de tabla estándar */
     table { display: table; width: 100%; border-collapse: collapse; }
     thead { display: table-header-group; }
     tbody { display: table-row-group; }
     tr { display: table-row; border: none; padding: 0; margin-bottom: 0; }
     th, td { display: table-cell; text-align: left; padding: 12px; border-bottom: 1px solid #ddd; position: static; padding-left: 12px; }
     
-    /* Restaurar cabeceras visibles */
     thead tr { position: static; top: auto; left: auto; }
     th { background-color: #f8f9fa; font-weight: bold; }
     
-    /* Eliminar etiquetas generadas por CSS */
     td:before { display: none; }
     
-    /* Ajustes de controles en tabla estándar */
     td select, td button {
         width: auto;
         margin-top: 0;
