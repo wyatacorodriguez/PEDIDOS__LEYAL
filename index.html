@@ -3,17 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Pedidos - LEYAL SPORT</title>
+    <title>Gestión de Pedidos - LEYAL</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Gestión de Pedidos</h1>
         
-        <!-- Formulario -->
+        <!-- Formulario de Registro -->
         <form id="orderForm">
             <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
             
+            <select id="seller" required>
+                <option value="" disabled selected>QUIÉN REGISTRA</option>
+                <option value="RONALD">RONALD</option>
+                <option value="MARLENE">MARLENE</option>
+                <option value="WILLIAN">WILLIAN</option>
+            </select>
+
             <select id="fabric" required>
                 <option value="" disabled selected>TELA O CALIDAD</option>
                 <option value="ECONOMICO">ECONOMICO</option>
@@ -30,15 +37,14 @@
             <thead>
                 <tr>
                     <th>Cliente</th>
+                    <th>Registra</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
                     <th>Estado</th>
                     <th>Acción</th>
                 </tr>
             </thead>
-            <tbody id="activeOrders">
-                <!-- Se llena dinámicamente -->
-            </tbody>
+            <tbody id="activeOrders"></tbody>
         </table>
 
         <!-- Tabla 2: Trabajos Finalizados -->
@@ -47,15 +53,14 @@
             <thead>
                 <tr>
                     <th>Cliente</th>
+                    <th>Registra</th>
                     <th>Tela / Calidad</th>
                     <th>Modelo</th>
                     <th>Estado</th>
                     <th>Eliminar</th>
                 </tr>
             </thead>
-            <tbody id="completedOrders">
-                <!-- Se llena dinámicamente -->
-            </tbody>
+            <tbody id="completedOrders"></tbody>
         </table>
     </div>
 
