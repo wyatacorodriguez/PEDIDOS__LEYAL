@@ -1,4 +1,3 @@
-/* --- Estilos Generales y Base --- */
 * {
     box-sizing: border-box;
 }
@@ -33,7 +32,7 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* --- Formulario Adaptable --- */
+/* Formulario adaptable */
 form {
     display: flex;
     gap: 10px;
@@ -63,7 +62,7 @@ form button {
     cursor: pointer;
 }
 
-/* --- ESTILOS DE TABLA ADAPTABLE (MÓVIL PRIMERO) --- */
+/* Estilos de tabla adaptable (Móvil) */
 table, thead, tbody, th, td, tr {
     display: block;
 }
@@ -107,12 +106,12 @@ td:before {
     color: #495057;
 }
 
-/* Etiquetas dinámicas para la versión móvil (7 columnas) */
-td:nth-of-type(1):before { content: "Fecha"; }
-td:nth-of-type(2):before { content: "Registra"; }
-td:nth-of-type(3):before { content: "Cliente"; }
-td:nth-of-type(4):before { content: "Tela / Calidad"; }
-td:nth-of-type(5):before { content: "Modelo"; }
+/* Etiquetas dinámicas en móvil */
+td:nth-of-type(1):before { content: "Fecha / Hora"; }
+td:nth-of-type(2):before { content: "Cliente"; }
+td:nth-of-type(3):before { content: "Tela / Calidad"; }
+td:nth-of-type(4):before { content: "Modelo"; }
+td:nth-of-type(5):before { content: "Registra"; }
 td:nth-of-type(6):before { content: "Estado"; }
 td:nth-of-type(7):before { content: ""; }
 
@@ -133,7 +132,7 @@ td button {
     margin-top: 5px;
 }
 
-/* --- AJUSTES PARA PANTALLAS GRANDES (ESCRITORIO) --- */
+/* Pantallas grandes (Escritorio) */
 @media (min-width: 768px) {
     body {
         padding: 20px;
