@@ -1,4 +1,3 @@
-// REEMPLAZA ESTA URL POR LA TUYA DE APPS SCRIPT
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU0pc02RSG7EJE4Q-P7_RNaPuurSHvhoNhPtfU8tVv9GjCnqheLm4dExl9amd3pPjL/exec";
 
 const orderForm = document.getElementById('orderForm');
@@ -7,31 +6,31 @@ const completedOrders = document.getElementById('completedOrders');
 
 document.addEventListener('DOMContentLoaded', fetchOrders);
 
-// Cargar pedidos desde Google Sheets
 function fetchOrders() {
-    activeOrders.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
-    completedOrders.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
+    activeOrders.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
+    completedOrders.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
     
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(orders => displayOrders(orders))
         .catch(err => {
             console.error("Error al cargar pedidos:", err);
-            activeOrders.innerHTML = '<tr><td colspan="5" style="color:red;">Error de conexión. Revisa la URL.</td></tr>';
+            activeOrders.innerHTML = '<tr><td colspan="6" style="color:red;">Error de conexión.</td></tr>';
         });
 }
 
-// Guardar nuevo pedido
 orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const clientVal = document.getElementById('client').value.trim().toUpperCase();
+    const sellerVal = document.getElementById('seller').value;
     const fabricVal = document.getElementById('fabric').value;
     const modelVal = document.getElementById('model').value.trim().toUpperCase();
 
     const newOrder = {
         action: "add",
         client: clientVal,
+        seller: sellerVal,
         fabric: fabricVal,
         model: modelVal,
         status: 'Pendiente'
@@ -48,7 +47,6 @@ orderForm.addEventListener('submit', (e) => {
     });
 });
 
-// Cambiar estado (Pendiente, En Proceso, Finalizado)
 function updateStatus(client, model, newStatus) {
     const payload = {
         action: "updateStatus",
@@ -67,7 +65,6 @@ function updateStatus(client, model, newStatus) {
     });
 }
 
-// Eliminar pedido
 function deleteOrder(client, model) {
     if (confirm(`¿Estás seguro de eliminar el pedido de ${client} (${model})?`)) {
         const payload = {
@@ -87,7 +84,6 @@ function deleteOrder(client, model) {
     }
 }
 
-// Separar y mostrar pedidos en sus respectivas tablas
 function displayOrders(orders) {
     activeOrders.innerHTML = '';
     completedOrders.innerHTML = '';
@@ -95,14 +91,14 @@ function displayOrders(orders) {
     const activeList = orders.filter(o => o.status !== 'Finalizado');
     const completedList = orders.filter(o => o.status === 'Finalizado');
 
-    // Renderizar Activos
     if (activeList.length === 0) {
-        activeOrders.innerHTML = '<tr><td colspan="5">No hay trabajos activos.</td></tr>';
+        activeOrders.innerHTML = '<tr><td colspan="6">No hay trabajos activos.</td></tr>';
     } else {
         activeList.forEach(order => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${order.client}</td>
+                <td>${order.seller}</td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
                 <td>
@@ -118,15 +114,15 @@ function displayOrders(orders) {
         });
     }
 
-    // Renderizar Finalizados
     if (completedList.length === 0) {
-        completedOrders.innerHTML = '<tr><td colspan="5">No hay trabajos finalizados.</td></tr>';
+        completedOrders.innerHTML = '<tr><td colspan="6">No hay trabajos finalizados.</td></tr>';
     } else {
         completedList.forEach(order => {
             const row = document.createElement('tr');
-            row.style.backgroundColor = '#f0fff0'; // Un todo leve verde para identificarlo
+            row.className = 'completed-order-row';
             row.innerHTML = `
                 <td><strong>${order.client}</strong></td>
+                <td>${order.seller}</td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
                 <td>
