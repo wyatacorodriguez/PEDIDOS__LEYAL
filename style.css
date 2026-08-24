@@ -12,7 +12,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 850px;
+    max-width: 900px;
     margin: 0 auto;
     background: #fff;
     padding: 15px;
@@ -107,13 +107,14 @@ td:before {
     color: #495057;
 }
 
-/* Etiquetas dinámicas para la versión móvil */
-td:nth-of-type(1):before { content: "Cliente"; }
+/* Etiquetas dinámicas para la versión móvil (7 columnas) */
+td:nth-of-type(1):before { content: "Fecha"; }
 td:nth-of-type(2):before { content: "Registra"; }
-td:nth-of-type(3):before { content: "Tela / Calidad"; }
-td:nth-of-type(4):before { content: "Modelo"; }
-td:nth-of-type(5):before { content: "Estado"; }
-td:nth-of-type(6):before { content: ""; }
+td:nth-of-type(3):before { content: "Cliente"; }
+td:nth-of-type(4):before { content: "Tela / Calidad"; }
+td:nth-of-type(5):before { content: "Modelo"; }
+td:nth-of-type(6):before { content: "Estado"; }
+td:nth-of-type(7):before { content: ""; }
 
 td > strong, td > select, td > button {
     display: inline-block;
@@ -150,7 +151,7 @@ td button {
     form input, 
     form select {
         flex: 1 1 auto;
-        min-width: 150px;
+        min-width: 140px;
     }
     form button {
         flex: 0 0 auto;
@@ -161,7 +162,7 @@ td button {
     thead { display: table-header-group; }
     tbody { display: table-row-group; }
     tr { display: table-row; border: none; padding: 0; margin-bottom: 0; }
-    th, td { display: table-cell; text-align: left; padding: 12px; border-bottom: 1px solid #ddd; position: static; padding-left: 12px; }
+    th, td { display: table-cell; text-align: left; padding: 10px; border-bottom: 1px solid #ddd; position: static; padding-left: 10px; }
     
     thead tr { position: static; top: auto; left: auto; }
     th { background-color: #f8f9fa; font-weight: bold; }
