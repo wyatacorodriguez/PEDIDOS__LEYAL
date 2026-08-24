@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/TU_CODIGO_AQUI/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU0pc02RSG7EJE4Q-P7_RNaPuurSHvhoNhPtfU8tVv9GjCnqheLm4dExl9amd3pPjL/exec";
 
 const orderForm = document.getElementById('orderForm');
 const activeOrders = document.getElementById('activeOrders');
