@@ -1,0 +1,146 @@
+// REEMPLAZA ESTA URL POR LA TUYA DE APPS SCRIPT
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU0pc02RSG7EJE4Q-P7_RNaPuurSHvhoNhPtfU8tVv9GjCnqheLm4dExl9amd3pPjL/exec";
+
+const orderForm = document.getElementById('orderForm');
+const activeOrders = document.getElementById('activeOrders');
+const completedOrders = document.getElementById('completedOrders');
+
+document.addEventListener('DOMContentLoaded', fetchOrders);
+
+// Cargar pedidos desde Google Sheets
+function fetchOrders() {
+    activeOrders.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
+    completedOrders.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
+    
+    fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(orders => displayOrders(orders))
+        .catch(err => {
+            console.error("Error al cargar pedidos:", err);
+            activeOrders.innerHTML = '<tr><td colspan="5" style="color:red;">Error de conexión. Revisa la URL.</td></tr>';
+        });
+}
+
+// Guardar nuevo pedido
+orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const clientVal = document.getElementById('client').value.trim().toUpperCase();
+    const fabricVal = document.getElementById('fabric').value;
+    const modelVal = document.getElementById('model').value.trim().toUpperCase();
+
+    const newOrder = {
+        action: "add",
+        client: clientVal,
+        fabric: fabricVal,
+        model: modelVal,
+        status: 'Pendiente'
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(newOrder)
+    }).then(() => {
+        orderForm.reset();
+        setTimeout(fetchOrders, 1500);
+    });
+});
+
+// Cambiar estado (Pendiente, En Proceso, Finalizado)
+function updateStatus(client, model, newStatus) {
+    const payload = {
+        action: "updateStatus",
+        client: client,
+        model: model,
+        status: newStatus
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+    }).then(() => {
+        setTimeout(fetchOrders, 1000);
+    });
+}
+
+// Eliminar pedido
+function deleteOrder(client, model) {
+    if (confirm(`¿Estás seguro de eliminar el pedido de ${client} (${model})?`)) {
+        const payload = {
+            action: "delete",
+            client: client,
+            model: model
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            setTimeout(fetchOrders, 1000);
+        });
+    }
+}
+
+// Separar y mostrar pedidos en sus respectivas tablas
+function displayOrders(orders) {
+    activeOrders.innerHTML = '';
+    completedOrders.innerHTML = '';
+
+    const activeList = orders.filter(o => o.status !== 'Finalizado');
+    const completedList = orders.filter(o => o.status === 'Finalizado');
+
+    // Renderizar Activos
+    if (activeList.length === 0) {
+        activeOrders.innerHTML = '<tr><td colspan="5">No hay trabajos activos.</td></tr>';
+    } else {
+        activeList.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.client}</td>
+                <td>${order.fabric}</td>
+                <td>${order.model}</td>
+                <td>
+                    <select onchange="updateStatus('${order.client}', '${order.model}', this.value)">
+                        <option value="Pendiente" ${order.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                        <option value="En Proceso" ${order.status === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+                        <option value="Finalizado">Finalizado</option>
+                    </select>
+                </td>
+                <td><button onclick="fetchOrders()">🔄 Sincronizar</button></td>
+            `;
+            activeOrders.appendChild(row);
+        });
+    }
+
+    // Renderizar Finalizados
+    if (completedList.length === 0) {
+        completedOrders.innerHTML = '<tr><td colspan="5">No hay trabajos finalizados.</td></tr>';
+    } else {
+        completedList.forEach(order => {
+            const row = document.createElement('tr');
+            row.style.backgroundColor = '#f0fff0'; // Un todo leve verde para identificarlo
+            row.innerHTML = `
+                <td><strong>${order.client}</strong></td>
+                <td>${order.fabric}</td>
+                <td>${order.model}</td>
+                <td>
+                    <select onchange="updateStatus('${order.client}', '${order.model}', this.value)">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En Proceso">En Proceso</option>
+                        <option value="Finalizado" selected>Finalizado</option>
+                    </select>
+                </td>
+                <td>
+                    <button style="background-color: #dc3545; color: white;" onclick="deleteOrder('${order.client}', '${order.model}')">🗑️ Eliminar</button>
+                </td>
+            `;
+            completedOrders.appendChild(row);
+        });
+    }
+}

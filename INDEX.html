@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - Roale Pixel Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Pedidos</h1>
+        
+        <!-- Formulario -->
+        <form id="orderForm">
+            <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
+            
+            <select id="fabric" required>
+                <option value="" disabled selected>TELA O CALIDAD</option>
+                <option value="ECONOMICO">ECONOMICO</option>
+                <option value="PREMIUM">PREMIUM</option>
+            </select>
+            
+            <input type="text" id="model" placeholder="MODELO" style="text-transform: uppercase;" required>
+            <button type="submit">Guardar Pedido</button>
+        </form>
+
+        <!-- Tabla 1: Pedidos Activos -->
+        <h2>Trabajos Activos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tela / Calidad</th>
+                    <th>Modelo</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="activeOrders">
+                <!-- Se llena dinámicamente -->
+            </tbody>
+        </table>
+
+        <!-- Tabla 2: Trabajos Finalizados -->
+        <h2 style="margin-top: 40px; color: #28a745;">Trabajos Finalizados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tela / Calidad</th>
+                    <th>Modelo</th>
+                    <th>Estado</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="completedOrders">
+                <!-- Se llena dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
