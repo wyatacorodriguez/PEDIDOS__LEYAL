@@ -22,17 +22,17 @@ function fetchOrders() {
 orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const sellerVal = document.getElementById('seller').value;
     const clientVal = document.getElementById('client').value.trim().toUpperCase();
     const fabricVal = document.getElementById('fabric').value;
     const modelVal = document.getElementById('model').value.trim().toUpperCase();
+    const sellerVal = document.getElementById('seller').value;
 
     const newOrder = {
         action: "add",
-        seller: sellerVal,
         client: clientVal,
         fabric: fabricVal,
         model: modelVal,
+        seller: sellerVal,
         status: 'Pendiente'
     };
 
@@ -98,10 +98,10 @@ function displayOrders(orders) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${order.date || ''}</td>
-                <td>${order.seller}</td>
                 <td><strong>${order.client}</strong></td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
+                <td>${order.seller}</td>
                 <td>
                     <select onchange="updateStatus('${order.client}', '${order.model}', this.value)">
                         <option value="Pendiente" ${order.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -123,10 +123,10 @@ function displayOrders(orders) {
             row.className = 'completed-order-row';
             row.innerHTML = `
                 <td>${order.date || ''}</td>
-                <td>${order.seller}</td>
                 <td><strong>${order.client}</strong></td>
                 <td>${order.fabric}</td>
                 <td>${order.model}</td>
+                <td>${order.seller}</td>
                 <td>
                     <select onchange="updateStatus('${order.client}', '${order.model}', this.value)">
                         <option value="Pendiente">Pendiente</option>
