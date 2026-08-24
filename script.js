@@ -88,8 +88,11 @@ function displayOrders(orders) {
     activeOrders.innerHTML = '';
     completedOrders.innerHTML = '';
 
-    const activeList = orders.filter(o => o.status !== 'Finalizado');
-    const completedList = orders.filter(o => o.status === 'Finalizado');
+    // Invertimos la lista con .reverse() para que el último pedido grabado salga arriba
+    const reversedOrders = [...orders].reverse();
+
+    const activeList = reversedOrders.filter(o => o.status !== 'Finalizado');
+    const completedList = reversedOrders.filter(o => o.status === 'Finalizado');
 
     if (activeList.length === 0) {
         activeOrders.innerHTML = '<tr><td colspan="7">No hay trabajos activos.</td></tr>';
