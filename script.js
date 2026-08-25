@@ -37,7 +37,7 @@ function fetchOrders() {
         });
 }
 
-// Convertir archivo a formato Base64
+// Convertir archivo de imagen a formato Base64 para enviarlo a Google Drive
 function fileToBase64(file) {
     return new Promise((resolve) => {
         if (!file) resolve({ raw: "", name: "", type: "" });
@@ -51,6 +51,7 @@ function fileToBase64(file) {
     });
 }
 
+// Registrar nuevo pedido con imágenes
 orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -68,7 +69,7 @@ orderForm.addEventListener('submit', async (e) => {
     const imgData1 = await fileToBase64(file1);
     const imgData2 = await fileToBase64(file2);
 
-    const newOrder = {
+    const payload = {
         action: "add",
         client: clientVal,
         fabric: fabricVal,
@@ -85,21 +86,22 @@ orderForm.addEventListener('submit', async (e) => {
 
     fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(newOrder)
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
     }).then(() => {
         orderForm.reset();
         submitBtn.disabled = false;
         submitBtn.innerText = "Guardar Pedido";
-        setTimeout(fetchOrders, 2000);
+        setTimeout(fetchOrders, 2500);
     }).catch(err => {
-        alert("Error al guardar pedido");
+        console.error("Error al guardar pedido:", err);
+        alert("Error al guardar el pedido");
         submitBtn.disabled = false;
         submitBtn.innerText = "Guardar Pedido";
     });
 });
 
+// Actualizar estado del pedido (Pendiente, En Proceso, Finalizado)
 function updateStatus(client, model, newStatus) {
     const payload = {
         action: "updateStatus",
@@ -110,14 +112,14 @@ function updateStatus(client, model, newStatus) {
 
     fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
     }).then(() => {
         setTimeout(fetchOrders, 1000);
     });
 }
 
+// Eliminar pedido
 function deleteOrder(client, model) {
     if (confirm(`¿Estás seguro de eliminar el pedido de ${client} (${model})?`)) {
         const payload = {
@@ -128,8 +130,7 @@ function deleteOrder(client, model) {
 
         fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         }).then(() => {
             setTimeout(fetchOrders, 1000);
@@ -137,6 +138,7 @@ function deleteOrder(client, model) {
     }
 }
 
+// Mostrar los pedidos en las tablas correspondiente
 function displayOrders(orders) {
     activeOrders.innerHTML = '';
     completedOrders.innerHTML = '';
@@ -146,7 +148,7 @@ function displayOrders(orders) {
     const activeList = reversedOrders.filter(o => o.status !== 'Finalizado');
     const completedList = reversedOrders.filter(o => o.status === 'Finalizado');
 
-    // Helper para generar los botones de fotos
+    // Generar botones para ver Foto 1 y Foto 2
     const getPhotoButtons = (o) => {
         let btns = '';
         if (o.imageUrl1 && o.imageUrl1.startsWith("http")) {
@@ -158,7 +160,7 @@ function displayOrders(orders) {
         return btns || `<span style="color:#888;">Sin fotos</span>`;
     };
 
-    // Render Activos
+    // Renderizar Trabajos Activos
     if (activeList.length === 0) {
         activeOrders.innerHTML = '<tr><td colspan="8">No hay trabajos activos.</td></tr>';
     } else {
@@ -184,7 +186,7 @@ function displayOrders(orders) {
         });
     }
 
-    // Render Finalizados
+    // Renderizar Trabajos Finalizados
     if (completedList.length === 0) {
         completedOrders.innerHTML = '<tr><td colspan="8">No hay trabajos finalizados.</td></tr>';
     } else {
