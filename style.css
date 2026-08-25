@@ -173,3 +173,18 @@ td button {
         margin-top: 0;
     }
 }
+
+/* Estilos opcionales para mejorar la columna de detalle de fotos */
+td a {
+    display: inline-block;
+    margin: 2px 0;
+    white-space: nowrap;
+}
+
+.form-group input[type="file"] {
+    padding: 5px;
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
