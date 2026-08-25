@@ -1,13 +1,13 @@
-// Coloca aquí tu enlace de Apps Script
+// Tu enlace de Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU0pc02RSG7EJE4Q-P7_RNaPuurSHvhoNhPtfU8tVv9GjCnqheLm4dExl9amd3pPjL/exec";
 
 const orderForm = document.getElementById('orderForm');
 const activeOrders = document.getElementById('activeOrders');
 const completedOrders = document.getElementById('completedOrders');
+const submitBtn = document.getElementById('submitBtn');
 
 document.addEventListener('DOMContentLoaded', fetchOrders);
 
-// Función limpiadora de respaldo por si viene alguna fecha con ISO feo
 function cleanDate(dateStr) {
     if (!dateStr) return '';
     if (typeof dateStr === 'string' && dateStr.includes('T')) {
@@ -25,25 +25,48 @@ function cleanDate(dateStr) {
 }
 
 function fetchOrders() {
-    activeOrders.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
-    completedOrders.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
+    activeOrders.innerHTML = '<tr><td colspan="8">Cargando...</td></tr>';
+    completedOrders.innerHTML = '<tr><td colspan="8">Cargando...</td></tr>';
     
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(orders => displayOrders(orders))
         .catch(err => {
             console.error("Error al cargar pedidos:", err);
-            activeOrders.innerHTML = '<tr><td colspan="7" style="color:red;">Error de conexión.</td></tr>';
+            activeOrders.innerHTML = '<tr><td colspan="8" style="color:red;">Error de conexión.</td></tr>';
         });
 }
 
-orderForm.addEventListener('submit', (e) => {
+// Convertir archivo a formato Base64
+function fileToBase64(file) {
+    return new Promise((resolve) => {
+        if (!file) resolve({ raw: "", name: "", type: "" });
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+            raw: reader.result.split(',')[1],
+            name: file.name,
+            type: file.type
+        });
+        reader.readAsDataURL(file);
+    });
+}
+
+orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Subiendo datos e imágenes...";
+
     const clientVal = document.getElementById('client').value.trim().toUpperCase();
     const fabricVal = document.getElementById('fabric').value;
     const modelVal = document.getElementById('model').value.trim().toUpperCase();
     const sellerVal = document.getElementById('seller').value;
+    
+    const file1 = document.getElementById('imageFile1').files[0];
+    const file2 = document.getElementById('imageFile2').files[0];
+
+    const imgData1 = await fileToBase64(file1);
+    const imgData2 = await fileToBase64(file2);
 
     const newOrder = {
         action: "add",
@@ -51,7 +74,13 @@ orderForm.addEventListener('submit', (e) => {
         fabric: fabricVal,
         model: modelVal,
         seller: sellerVal,
-        status: 'Pendiente'
+        status: 'Pendiente',
+        imageRaw1: imgData1.raw,
+        imageName1: imgData1.name,
+        mimeType1: imgData1.type,
+        imageRaw2: imgData2.raw,
+        imageName2: imgData2.name,
+        mimeType2: imgData2.type
     };
 
     fetch(SCRIPT_URL, {
@@ -61,7 +90,13 @@ orderForm.addEventListener('submit', (e) => {
         body: JSON.stringify(newOrder)
     }).then(() => {
         orderForm.reset();
-        setTimeout(fetchOrders, 1500);
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Guardar Pedido";
+        setTimeout(fetchOrders, 2000);
+    }).catch(err => {
+        alert("Error al guardar pedido");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Guardar Pedido";
     });
 });
 
@@ -106,15 +141,26 @@ function displayOrders(orders) {
     activeOrders.innerHTML = '';
     completedOrders.innerHTML = '';
 
-    // Invierte el arreglo para que el último pedido grabado pase arriba de la lista
     const reversedOrders = [...orders].reverse();
 
     const activeList = reversedOrders.filter(o => o.status !== 'Finalizado');
     const completedList = reversedOrders.filter(o => o.status === 'Finalizado');
 
-    // Trabajos Activos
+    // Helper para generar los botones de fotos
+    const getPhotoButtons = (o) => {
+        let btns = '';
+        if (o.imageUrl1 && o.imageUrl1.startsWith("http")) {
+            btns += `<a href="${o.imageUrl1}" target="_blank" style="text-decoration:none; background:#007bff; color:white; padding:4px 6px; border-radius:4px; font-size:11px; margin-right:2px;">🔍 Foto 1</a>`;
+        }
+        if (o.imageUrl2 && o.imageUrl2.startsWith("http")) {
+            btns += `<a href="${o.imageUrl2}" target="_blank" style="text-decoration:none; background:#17a2b8; color:white; padding:4px 6px; border-radius:4px; font-size:11px;">🔍 Foto 2</a>`;
+        }
+        return btns || `<span style="color:#888;">Sin fotos</span>`;
+    };
+
+    // Render Activos
     if (activeList.length === 0) {
-        activeOrders.innerHTML = '<tr><td colspan="7">No hay trabajos activos.</td></tr>';
+        activeOrders.innerHTML = '<tr><td colspan="8">No hay trabajos activos.</td></tr>';
     } else {
         activeList.forEach(order => {
             const row = document.createElement('tr');
@@ -131,15 +177,16 @@ function displayOrders(orders) {
                         <option value="Finalizado">Finalizado</option>
                     </select>
                 </td>
+                <td>${getPhotoButtons(order)}</td>
                 <td><button onclick="fetchOrders()">🔄 Sincronizar</button></td>
             `;
             activeOrders.appendChild(row);
         });
     }
 
-    // Trabajos Finalizados
+    // Render Finalizados
     if (completedList.length === 0) {
-        completedOrders.innerHTML = '<tr><td colspan="7">No hay trabajos finalizados.</td></tr>';
+        completedOrders.innerHTML = '<tr><td colspan="8">No hay trabajos finalizados.</td></tr>';
     } else {
         completedList.forEach(order => {
             const row = document.createElement('tr');
@@ -157,6 +204,7 @@ function displayOrders(orders) {
                         <option value="Finalizado" selected>Finalizado</option>
                     </select>
                 </td>
+                <td>${getPhotoButtons(order)}</td>
                 <td>
                     <button style="background-color: #dc3545; color: white;" onclick="deleteOrder('${order.client}', '${order.model}')">🗑️ Eliminar</button>
                 </td>
