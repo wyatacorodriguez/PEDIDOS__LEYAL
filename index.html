@@ -3,36 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Pedidos - LEYAL</title>
+    <title>Gestión de Pedidos - LEYAL SPORT</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="container">
-        <h1>Gestión de Pedidos</h1>
+        <h1>Registrar Nuevo Pedido</h1>
         
-        <!-- Formulario de Registro (Cliente -> Tela -> Modelo -> Quién Registra) -->
         <form id="orderForm">
-            <input type="text" id="client" placeholder="CLIENTE" style="text-transform: uppercase;" required>
+            <div class="form-group">
+                <label for="client">Cliente:</label>
+                <input type="text" id="client" required placeholder="Nombre del cliente">
+            </div>
 
-            <select id="fabric" required>
-                <option value="" disabled selected>TELA O CALIDAD</option>
-                <option value="ECONOMICO">ECONOMICO</option>
-                <option value="PREMIUM">PREMIUM</option>
-            </select>
-            
-            <input type="text" id="model" placeholder="MODELO" style="text-transform: uppercase;" required>
+            <div class="form-group">
+                <label for="fabric">Tela / Calidad:</label>
+                <select id="fabric">
+                    <option value="PREMIUM">PREMIUM</option>
+                    <option value="ECONOMICO">ECONOMICO</option>
+                </select>
+            </div>
 
-            <select id="seller" required>
-                <option value="" disabled selected>QUIÉN REGISTRA</option>
-                <option value="RONALD">RONALD</option>
-                <option value="MARLENE">MARLENE</option>
-                <option value="WILLIAN">WILLIAN</option>
-            </select>
+            <div class="form-group">
+                <label for="model">Modelo:</label>
+                <input type="text" id="model" required placeholder="Modelo / Diseño">
+            </div>
 
-            <button type="submit">Guardar Pedido</button>
+            <div class="form-group">
+                <label for="seller">Registra:</label>
+                <select id="seller">
+                    <option value="WILLIAN">WILLIAN</option>
+                    <option value="MARLENE">MARLENE</option>
+                </select>
+            </div>
+
+            <!-- DOS CAMPOS DE IMAGEN -->
+            <div class="form-group">
+                <label for="imageFile1">Foto 1 (Captura/Pedido):</label>
+                <input type="file" id="imageFile1" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label for="imageFile2">Foto 2 (Diseño/Lista de Tallas):</label>
+                <input type="file" id="imageFile2" accept="image/*">
+            </div>
+
+            <button type="submit" id="submitBtn">Guardar Pedido</button>
         </form>
 
-        <!-- Tabla 1: Pedidos Activos -->
         <h2>Trabajos Activos</h2>
         <table>
             <thead>
@@ -43,14 +62,14 @@
                     <th>Modelo</th>
                     <th>Registra</th>
                     <th>Estado</th>
+                    <th>Detalle</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody id="activeOrders"></tbody>
         </table>
 
-        <!-- Tabla 2: Trabajos Finalizados -->
-        <h2 style="margin-top: 40px; color: #28a745;">Trabajos Finalizados</h2>
+        <h2>Trabajos Finalizados</h2>
         <table>
             <thead>
                 <tr>
@@ -60,7 +79,8 @@
                     <th>Modelo</th>
                     <th>Registra</th>
                     <th>Estado</th>
-                    <th>Eliminar</th>
+                    <th>Detalle</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody id="completedOrders"></tbody>
